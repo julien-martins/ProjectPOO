@@ -1,4 +1,64 @@
 package com.company.salles;
 
+import com.company.Creneau;
+
+import java.util.*;
+
+
 public class Salle {
-}
+    private int numero;
+    private String nom;
+    private int nbDePlace;
+    private int tarifPlace;
+    private Map<Integer, Set<Creneau>> lesCreneauxOcupes;
+
+    public Salle(int numero,String nom,int nbDePlace,int tarifPlace){
+        this.numero=numero;
+        this.nom=nom;
+        this.nbDePlace=nbDePlace;
+        this.tarifPlace=tarifPlace;
+        this.lesCreneauxOcupes = new TreeMap<>();
+    }
+    public boolean estDisponible(Creneau c){
+        Set<Creneau> lesCreneaux = lesCreneauxOcupes.get(numero);
+        for ( Creneau creneau :lesCreneaux) {
+            int comparator=creneau.getDebut().compareTo(c.getFin()) ;
+            int comparator2= creneau.getFin().compareTo(c.getDebut());
+            if (comparator>=1 && comparator2<=-1){
+                continue;
+            }
+            else {
+                return false;
+            }
+
+
+        }
+        return true;
+
+    }
+        boolean ajouterCreneau(Creneau c){
+            if (lesCreneauxOcupes.containsKey(c.getJourDeLaSemaine())) {
+
+                return lesCreneauxOcupes.get(c.getJourDeLaSemaine()).add(c);
+            }
+            else {
+                Set<Creneau> lesCreneau= new HashSet<>();
+                if (estDisponible(c)){
+                    lesCreneau.add(c);
+                    lesCreneauxOcupes.put(c.getJourDeLaSemaine(),lesCreneau);
+                    return true;
+                }
+                return false;
+            }
+            }
+            public boolean pasDeCreneauDisponible(int jour){
+                if(lesCreneauxOcupes.containsKey(jour)){
+                    return lesCreneauxOcupes.get(jour).isEmpty();
+                }
+                return false;
+            }
+
+    }
+
+
+
