@@ -7,17 +7,23 @@ import java.util.*;
 
 public class Salle {
     private int numero;
+    private static int numeroSalle;
     private String nom;
     private int nbDePlace;
-    private int tarifPlace;
+    private double tarifPlace;
+    private double tarifReduit ;
     private Map<Integer, Set<Creneau>> lesCreneauxOcupes;
 
-    public Salle(int numero,String nom,int nbDePlace,int tarifPlace){
-        this.numero=numero;
+
+    public Salle(String nom,int nbDePlace,double tarifPlace){
+        numeroSalle+=10;
+        this.numero=numeroSalle;
         this.nom=nom;
         this.nbDePlace=nbDePlace;
         this.tarifPlace=tarifPlace;
         this.lesCreneauxOcupes = new TreeMap<>();
+        this.tarifReduit=tarifPlace-(tarifPlace*0.60);
+
     }
     public boolean estDisponible(Creneau c){
         Set<Creneau> lesCreneaux = lesCreneauxOcupes.get(numero);
