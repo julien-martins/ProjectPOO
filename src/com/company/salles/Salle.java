@@ -42,31 +42,35 @@ public class Salle {
         return true;
 
     }
-        boolean ajouterCreneau(Creneau c){
-            if (lesCreneauxOcupes.containsKey(c.getJourDeLaSemaine())) {
+    public boolean ajouterCreneau(Creneau c){
+        if (lesCreneauxOcupes.containsKey(c.getJourDeLaSemaine())) {
 
-                return lesCreneauxOcupes.get(c.getJourDeLaSemaine()).add(c);
+            return lesCreneauxOcupes.get(c.getJourDeLaSemaine()).add(c);
+        }
+        else {
+            Set<Creneau> lesCreneau= new HashSet<>();
+            if (estDisponible(c)){
+                lesCreneau.add(c);
+                lesCreneauxOcupes.put(c.getJourDeLaSemaine(),lesCreneau);
+                return true;
             }
-            else {
-                Set<Creneau> lesCreneau= new HashSet<>();
-                if (estDisponible(c)){
-                    lesCreneau.add(c);
-                    lesCreneauxOcupes.put(c.getJourDeLaSemaine(),lesCreneau);
-                    return true;
-                }
-                return false;
-            }
-            }
-            public boolean pasDeCreneauDisponible(int jour){
-                if(lesCreneauxOcupes.containsKey(jour)){
-                    return lesCreneauxOcupes.get(jour).isEmpty();
-                }
-                return false;
-            }
-
+            return false;
+        }
+    }
+    public boolean pasDeCreneauDisponible(int jour){
+        if(lesCreneauxOcupes.containsKey(jour)){
+            return lesCreneauxOcupes.get(jour).isEmpty();
+        }
+        return false;
     }
 
+    public void supprimerCreneauOccupes()
+    {
+        lesCreneauxOcupes.clear();
+    }
 
+    public int getNumero() { return numero; }
 
+    public int getNbDePlace(){return nbDePlace;}
 
-
+}

@@ -26,6 +26,10 @@ public class Horaire implements Comparable<Horaire> {
         return this. total-h.getTotal();
     }
 
-
+    @Override
+    public boolean equals(Object o)
+    {
+        return total == ((Horaire)o).getTotal();
+    }
 
 }

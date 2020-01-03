@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -26,10 +27,25 @@ public class Main {
                     } else {
                         switch (choice) {
                             case 0: // Reinitialiser programmation
-                                System.out.println("CHOIX 0");
+                                gestionProgrammationSemaine.reinitialiserProgrammation();
                                 break;
                             case 1: // Ajouter Film
-                                System.out.println("CHOIX 1");
+                                String titre;
+                                String realisateur = "";
+                                int duree = 0;
+
+                                System.out.print("Veuillez saisir le titre du film: ");
+                                if(scanner.hasNext())
+                                {
+                                    titre = scanner.nextLine();
+                                }
+                                else
+                                {
+                                    scanner.reset();
+                                    continue;
+                                }
+
+                                gestionProgrammationSemaine.ajouterFilm(titre, realisateur, duree);
                                 break;
                             case 2: // Ajouter piece de theatre
                                 System.out.println("CHOIX 2");
@@ -67,7 +83,7 @@ public class Main {
             System.out.println("Arret en cours...");
         } catch (Exception e)
         {
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }
 
     }
