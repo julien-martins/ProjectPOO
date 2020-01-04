@@ -3,6 +3,7 @@ package com.company;
 import com.company.interfaces.IProgrammationSemaine;
 import com.company.salles.Salle;
 import com.company.salles.SalleTheatre;
+import com.company.seances.Seance;
 import com.company.seances.SeanceFilm;
 import com.company.seances.SeanceTheatre;
 import com.company.spectacles.Film;
@@ -89,7 +90,7 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
             if(f.getTitre().equals(titre) && f.getRealisateur().equals(realisateur))
                 throw new IllegalArgumentException("Le Film existe deja");
         }
-        Film film = new Film(realisateur, titre, duree);
+        Film film = new Film(titre, realisateur, duree);
         lesFilms.put(film.getNumero(), film);
     }
 
@@ -108,7 +109,7 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
         else if(lesPieces.containsKey(numSpectacle))
             lesPieces.get(numSpectacle).ajouterInterprete(interprete);
         else
-            throw new IllegalArgumentException("Spectacle Innexistant");
+            throw new IllegalArgumentException("l'id ne correspond a aucun spectacle ! ");
 
     }
 
@@ -176,13 +177,15 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
             throw new IllegalArgumentException("Film inexistant");
         if(!lesSalles.containsKey(idSalle))
             throw new IllegalArgumentException("Salle inexistante");
-
         int duree = lesFilms.get(idFilm).getDuree();
         Horaire fin = new Horaire( debut.getHeure() + duree / 60, debut.getMinute() + duree % 60);
         Creneau cr = new Creneau(jour, debut, fin);
         if(!lesSalles.get(idSalle).estDisponible(cr))
+        {
             throw new IllegalStateException("Creneau indisponible");
-        SeanceFilm seance = new SeanceFilm(cr);
+        }
+        Salle salle = lesSalles.get(idSalle);
+        SeanceFilm seance = new SeanceFilm(salle, cr);
         lesFilms.get(idFilm).ajouterSeance(seance);
     }
 
@@ -229,8 +232,8 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
         Creneau cr = new Creneau(jour, debut, fin);
         if(!lesSalles.get(idSalle).estDisponible(cr))
             throw new IllegalStateException("Creneau indisponnible pour dans cette salle");
-        SeanceTheatre seance = new SeanceTheatre(cr);
-        lesSalles.get(idSalle).ajouterCreneau(cr);
+        SalleTheatre salle = (SalleTheatre)lesSalles.get(idSalle);
+        SeanceTheatre seance = new SeanceTheatre(salle, cr);
         lesPieces.get(idPiece).ajouterSeance(seance);
     }
 
@@ -243,7 +246,40 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
      */
     @Override
     public double chiffreAffaires(int numSpectacle) {
-        return 0;
+
+        double chiffreAffaire = 0;
+
+        if(existeFilm(numSpectacle))
+        {
+            Film film = lesFilms.get(numSpectacle);
+
+            for (Seance seance : film.lesSeances())
+            {
+                SeanceFilm seanceFilm = (SeanceFilm)seance;
+
+                return seanceFilm.getNbrePlaceVendueTN() * seanceFilm.getTarifPlace()
+                        + seanceFilm.getNbrePlaceVendueTR() * seanceFilm.getTarifReduit();
+
+            }
+
+        }
+        else if(existePiece(numSpectacle))
+        {
+            PieceTheatre pieceTheatre = lesPieces.get(numSpectacle);
+
+            for (Seance seance : pieceTheatre.lesSeances())
+            {
+                SeanceTheatre seanceTheatre = (SeanceTheatre)seance;
+
+                return seanceTheatre.getNbrePlaceVendueTN() * seanceTheatre.getTarifPlace()
+                        + seanceTheatre.getNbreFauteuilVendue() * seanceTheatre.getPrixFauteuil();
+
+            }
+        }
+        else
+            throw new IllegalArgumentException("Spectacle inexistant");
+
+        return chiffreAffaire;
     }
 
     /**
@@ -254,8 +290,46 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
      * @throws IllegalArgumentException Spectacle inexistant
      */
     @Override
-    public double getTauxRemplissage(int numSpectacle) {
-        return 0;
+    public double getTauxRemplissage(int numSpectacle)
+    {
+        double totalPlace = 0;
+        double totalPlaceVendue = 0;
+
+        if(existeFilm(numSpectacle))
+        {
+            Film film = lesFilms.get(numSpectacle);
+
+
+
+            for (Seance seance : film.lesSeances())
+            {
+                SeanceFilm seanceFilm = (SeanceFilm)seance;
+
+                totalPlace += lesSalles.get(seanceFilm.getNumeroSalle()).getNbDePlace();
+                totalPlaceVendue += seanceFilm.getNbrePlaceVendueTR();
+                totalPlaceVendue += seanceFilm.getNbrePlaceVendueTN();
+            }
+
+        }
+        else if(existePiece(numSpectacle))
+        {
+            Film film = lesFilms.get(numSpectacle);
+
+            for(Seance seance : film.lesSeances())
+            {
+                SeanceTheatre seanceTheatre = (SeanceTheatre) seance;
+
+                totalPlace += lesSalles.get(seanceTheatre.getNumeroSalle()).getNbDePlace();
+                totalPlaceVendue += seanceTheatre.getNbrePlaceVendueTN();
+                totalPlaceVendue += seanceTheatre.getNbreFauteuilVendue();
+            }
+
+
+        }
+        else
+            throw new IllegalArgumentException("Spectacle inexistant");
+
+        return totalPlaceVendue / totalPlace * 100;
     }
 
     /**
@@ -370,16 +444,36 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
      * @return les films sous forme d'une chaîne de caractères
      */
     @Override
-    public String lesFilms() {
-        return null;
+    public String lesFilms()
+    {
+        String result = "";
+        if(lesFilms.isEmpty())
+            return null;
+        for(Map.Entry<Integer, Film> entry : lesFilms.entrySet())
+        {
+            result += entry.getValue().toString();
+            result += "\n";
+        }
+
+        return result;
     }
+
 
     /**
      * @return les pièces de théâtre sous forme d'une chaîne de caractères
      */
     @Override
-    public String lesPieces() {
-        return null;
+    public String lesPieces()
+    {
+        String result = "";
+
+        for(Map.Entry<Integer, PieceTheatre> entry : lesPieces.entrySet())
+        {
+            result += entry.getValue().toString();
+            result += "\n";
+        }
+
+        return result;
     }
 
     /**
@@ -408,7 +502,27 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
     @Override
     public String lesSeancesTheatre(int idPiece) {
 
-        return null;
+        if(!existePiece(idPiece))
+            throw new IllegalArgumentException("Piece inexsistante !");
+
+        PieceTheatre piece = lesPieces.get(idPiece);
+        if(piece == null)
+            return null;
+
+        String result = "";
+
+        for ( Seance seance : piece.lesSeances() )
+        {
+            SeanceTheatre seanceTheatre = (SeanceTheatre) seance;
+
+            result += "Seance du " + seanceTheatre.getJour() + " " + seanceTheatre.getDebutCreneau().getHeure() + "h" + seanceTheatre.getDebutCreneau().getMinute()
+                    + " " + seanceTheatre.getFinCreneau().getHeure() + "h" + seanceTheatre.getFinCreneau().getMinute();
+            result += "\n Nombre de places vendues : " + seanceTheatre.getNbrePlaceVendueTN();
+            result += "\n Nombre de places vendues au tarif fauteuil : " + seanceTheatre.getNbreFauteuilVendue();
+            result += "\n En salle numero " + seanceTheatre.getNumeroSalle();
+        }
+
+        return result;
     }
 
     /**
@@ -420,7 +534,28 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
      */
     @Override
     public String lesSeancesFilm(int idFilm) {
-        return null;
+
+        if(!existeFilm(idFilm))
+            throw new IllegalArgumentException("Film inexsistant !");
+
+        Film film = lesFilms.get(idFilm);
+        if(film == null)
+            return null;
+
+        String result = "";
+
+        for ( Seance seance : film.lesSeances() )
+        {
+            SeanceFilm seanceFilm = (SeanceFilm) seance;
+
+            result += "Seance du " + seanceFilm.getJour() + " " + seanceFilm.getDebutCreneau().getHeure() + "h" + seanceFilm.getDebutCreneau().getMinute()
+                    + " " + seanceFilm.getFinCreneau().getHeure() + "h" + seanceFilm.getFinCreneau().getMinute();
+            result += "\n Nombre de places vendues: " + seanceFilm.getNbrePlaceVendueTN();
+            result += "\n Nombre de places vendues au tarif reduit: " + seanceFilm.getNbrePlaceVendueTR();
+            result += "\n En salle numero " + seanceFilm.getNumeroSalle();
+        }
+
+        return result;
     }
 
     /**

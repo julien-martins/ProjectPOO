@@ -17,4 +17,10 @@ public class Film extends Spectacle{
     public int getDuree() { return duree; }
     public String getRealisateur() { return realisateur; }
 
+    @Override
+    public String toString()
+    {
+        return super.toString() +  " | " + realisateur + " | " + duree;
+    }
+
 }

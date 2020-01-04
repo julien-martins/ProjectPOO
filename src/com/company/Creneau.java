@@ -21,4 +21,12 @@ public class Creneau {
         return jourDeLaSemaine;
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        return jourDeLaSemaine == ((Creneau) o).getJourDeLaSemaine()
+                && debut.equals(((Creneau) o).getDebut()) && fin.equals(((Creneau) o).getFin());
+    }
+
+
 }

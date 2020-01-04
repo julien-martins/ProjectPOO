@@ -18,4 +18,6 @@ public class PieceTheatre extends Spectacle {
     public String getMetteurEnScene(){ return metteurEnScene; }
     public int getNbEntractes(){ return nbEntractes; }
 
+    public String toString() {return super.toString() + " | " + metteurEnScene + " | " + nbEntractes;}
+
 }

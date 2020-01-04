@@ -10,12 +10,12 @@ public class Salle {
     private static int numeroSalle;
     private String nom;
     private int nbDePlace;
-    private double tarifPlace;
+    private int tarifPlace;
     private double tarifReduit ;
     private Map<Integer, Set<Creneau>> lesCreneauxOcupes;
 
 
-    public Salle(String nom,int nbDePlace,double tarifPlace){
+    public Salle(String nom,int nbDePlace,int tarifPlace){
         numeroSalle+=10;
         this.numero=numeroSalle;
         this.nom=nom;
@@ -26,18 +26,29 @@ public class Salle {
 
     }
     public boolean estDisponible(Creneau c){
-        Set<Creneau> lesCreneaux = lesCreneauxOcupes.get(numero);
-        for ( Creneau creneau :lesCreneaux) {
-            int comparator=creneau.getDebut().compareTo(c.getFin()) ;
-            int comparator2= creneau.getFin().compareTo(c.getDebut());
-            if (comparator>=1 && comparator2<=-1){
-                continue;
+        Set<Creneau> lesCreneaux = lesCreneauxOcupes.get(c.getJourDeLaSemaine());
+        if(lesCreneaux == null)
+            return true;
+
+        for ( Creneau creneau : lesCreneaux) {
+
+            if ( c.getDebut().compareTo(creneau.getDebut()) >= 1) // c debut  > creneau debut
+            {
+                if(c.getDebut().compareTo(creneau.getFin()) <= -1) // c debut > creneau fin
+                    return false;
             }
-            else {
+            else
+            {
+                if (c.getFin().compareTo(creneau.getDebut()) >= 1) // c fin < c debut
+                    return false;
+            }
+
+
+            /*int comparator = creneau.getFin().compareTo(c.getDebut()) ;
+            int comparator2 = creneau.getDebut().compareTo(c.getFin());
+            if ( comparator <= -1 || comparator2 >= 1 ){
                 return false;
-            }
-
-
+            }*/
         }
         return true;
 
@@ -72,5 +83,8 @@ public class Salle {
     public int getNumero() { return numero; }
 
     public int getNbDePlace(){return nbDePlace;}
+
+    public int getTarifPlace() {return tarifPlace;}
+    public double getTarifReduit() {return tarifReduit;}
 
 }

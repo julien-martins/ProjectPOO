@@ -29,7 +29,7 @@ public class Spectacle {
     {
         for(Seance seance : seances)
         {
-            if(seance.getJour().equals(jour) && seance.getDebutCreneau().equals(debut))
+            if(seance.getJour() == jour && seance.getDebutCreneau().equals(debut))
                 return seance;
         }
         return null;
@@ -65,6 +65,11 @@ public class Spectacle {
         return seances.add(seance);
     }
 
+    public SortedSet<Seance> lesSeances()
+    {
+        return seances;
+    }
+    /*
     public int getTauxMoyenRemplissage()
     {
 
@@ -77,8 +82,11 @@ public class Spectacle {
 
         return -1;
     }
+    */
 
     public int getNumero() { return numero; }
     public String getTitre() { return titre; }
+
+    public String toString() {return numero + " | " + titre;}
 
 }
