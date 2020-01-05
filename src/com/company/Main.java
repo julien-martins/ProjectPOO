@@ -61,7 +61,6 @@ public class Main {
 
         gestion.ajouterFilm(titre, realisateur, duree);
         logMessage("Ajout d'un film ... ");
-        System.out.println("Ajout d'un film ... ");
     }
 
     private static void ajouterPiece()
