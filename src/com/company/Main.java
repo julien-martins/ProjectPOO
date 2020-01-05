@@ -123,6 +123,9 @@ public class Main {
 
         int jour = inputValue("Veuillez saisir le jour de la piece: ");
 
+        if(gestion.existeSeanceCeJour(id, jour))
+            throw new IllegalArgumentException("Il existe deja une seance programme ce jour");
+
         int heures = inputValue("Veuillez saisir l'heure de la piece: ");
 
         int minutes = inputValue("Veuillez saisir les minutes de la piece: ");
@@ -139,17 +142,29 @@ public class Main {
 
     private static void vendrePlaceFilm()
     {
-        System.out.println(gestion.lesFilms());
+        boolean inputValid = true;
+        int idFilm = -1;
+        int jour = -1;
+        int heures = -1;
+        int minutes = -1;
 
-        int idFilm = inputValue("Veuillez saisir l'id du film: ");
+        do {
+            System.out.println(gestion.lesFilms());
 
-        System.out.println(gestion.lesSeancesFilm(idFilm));
+            if(!inputValid)
+                System.err.println("Seance inexistante, reselectionez une seance");
+            idFilm = inputValue("Veuillez saisir l'id du film: ");
 
-        int jour = inputValue("Veuillez saisir le jour de la seance: ");
+            System.out.println(gestion.lesSeancesFilm(idFilm));
 
-        System.out.println("Veuillez saisir l'horaire de la seance: ");
-        int heures = inputValue("heures: ");
-        int minutes = inputValue("minutes: ");
+            jour = inputValue("Veuillez saisir le jour de la seance: ");
+
+            System.out.println("Veuillez saisir l'horaire de la seance: ");
+            heures = inputValue("heures: ");
+            minutes = inputValue("minutes: ");
+
+            inputValid = gestion.existeSeanceFilm(idFilm, jour, heures, minutes);
+        } while(!inputValid);
 
         System.out.println("Nombre de place disponnible " + gestion.getNbPlacesDispo(idFilm, jour, heures, minutes) );
 
@@ -227,8 +242,10 @@ public class Main {
     private static Integer inputValue(String message)
     {
         System.out.print(message);
-        if(!scanner.hasNextInt())
+        if(!scanner.hasNextInt()) {
+            scanner.nextLine();
             throw new IllegalArgumentException("Veuillez saisir un chiffre !");
+        }
 
         int value = scanner.nextInt();
         scanner.nextLine();

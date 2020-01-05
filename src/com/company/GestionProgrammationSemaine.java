@@ -447,7 +447,7 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
 
         int placeDispo = seance.getFauteuilDisponnible();
         if(placeDispo < nbFauteuils)
-            throw new IllegalArgumentException("Pas assez de places disponibles");
+            throw new IllegalArgumentException("Pas assez de fauteuil disponibles");
 
         seance.vendrePlacesFauteuil(nbFauteuils);
 
@@ -545,6 +545,7 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
             result += "\n Nombre de places vendues : " + seanceTheatre.getNbrePlaceVendueTN();
             result += "\n Nombre de places vendues au tarif fauteuil : " + seanceTheatre.getNbreFauteuilVendue();
             result += "\n En salle numero " + seanceTheatre.getNumeroSalle();
+            result += "\n ---------------------------------- \n";
         }
 
         return result;
@@ -578,6 +579,7 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
             result += "\n Nombre de places vendues: " + seanceFilm.getNbrePlaceVendueTN();
             result += "\n Nombre de places vendues au tarif reduit: " + seanceFilm.getNbrePlaceVendueTR();
             result += "\n En salle numero " + seanceFilm.getNumeroSalle();
+            result += "\n ---------------------------------- \n";
         }
 
         return result;
