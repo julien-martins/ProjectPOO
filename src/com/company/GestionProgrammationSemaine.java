@@ -461,7 +461,7 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
     {
         String result = "";
         if(lesFilms.isEmpty())
-            return null;
+            throw new IllegalArgumentException("Aucun Film");
         for(Map.Entry<Integer, Film> entry : lesFilms.entrySet())
         {
             result += entry.getValue().toString();
@@ -479,6 +479,9 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
     public String lesPieces()
     {
         String result = "\n";
+
+        if(lesPieces.isEmpty())
+            throw new IllegalArgumentException("Aucune Piece");
 
         for(Map.Entry<Integer, PieceTheatre> entry : lesPieces.entrySet())
             result += entry.getValue().toString() + "\n";
@@ -529,7 +532,7 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
 
         PieceTheatre piece = lesPieces.get(idPiece);
         if(piece == null)
-            return null;
+            throw new IllegalArgumentException("Aucune Piece(s)");
 
         String result = "";
 
@@ -562,7 +565,7 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
 
         Film film = lesFilms.get(idFilm);
         if(film == null)
-            return null;
+            throw new IllegalArgumentException("Aucun Film(s)");
 
         String result = "";
 
