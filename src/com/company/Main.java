@@ -143,6 +143,9 @@ public class Main {
         logMessage("Ajout Seance Film ... ");
     }
 
+    /**
+     * @throws IllegalArgumentException pas assez de place
+     */
     private static void vendrePlaceFilm()
     {
         boolean inputValid = true;
@@ -169,10 +172,14 @@ public class Main {
             inputValid = gestion.existeSeanceFilm(idFilm, jour, heures, minutes);
         } while(!inputValid);
 
-        System.out.println("Nombre de place disponnible " + gestion.getNbPlacesDispo(idFilm, jour, heures, minutes) );
+        int nbPlaceDispo = gestion.getNbPlacesDispo(idFilm, jour, heures, minutes);
+        System.out.println("Nombre de place disponnible " +  nbPlaceDispo );
 
         int nbPlaceTN = inputValue("Veuillez saisir le nombre de place tarif normal:");
         int nbPlaceTR = inputValue("Veuillez saisir le nombre de place tarif reduit:");
+
+        if(nbPlaceDispo < nbPlaceTN + nbPlaceTR)
+            throw new IllegalArgumentException("Pas assez de place ! ");
 
         Horaire debutSeance = new Horaire(heures, minutes);
         gestion.vendrePlaceFilmTN(idFilm, jour, debutSeance, nbPlaceTN);
