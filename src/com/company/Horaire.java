@@ -8,6 +8,10 @@ public class Horaire implements Comparable<Horaire> {
     private int total;
 
 
+    /**
+     * @param heure
+     * @param minute
+     */
     public Horaire (int heure,int minute){
         this.heure=heure;
         this.minute=minute;

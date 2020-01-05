@@ -115,9 +115,6 @@ public class Main {
         logMessage("Ajout Seance Film ... ");
     }
 
-    /**
-     * @throws IllegalArgumentException une seance est deja programme au meme jour que l'utilisateur a saisie
-     */
     private static void ajouterSeancePiece()
     {
         System.out.println(gestion.lesPieces());
@@ -221,12 +218,6 @@ public class Main {
         System.out.println("Chiffre D'affaire : " + gestion.chiffreAffaires(idSpectacle) + " euro(s) ");
     }
 
-    /**
-     *
-     * @param choice
-     * @returns retourne faux si l'utilisateur decide de quitter
-     * @throws IllegalArgumentException choix n'est pas entre 0 et 9
-     */
     private static boolean gestionMenu(int choice)
     {
         if(choice < 0 || choice > 9)
@@ -255,12 +246,6 @@ public class Main {
         return true;
     }
 
-    /**
-     *
-     * @param message
-     * @return retourne la valeur saisie par l'utilisateur
-     * @throws IllegalArgumentException la valeur saisie n'est pas un entier
-     */
     private static Integer inputValue(String message)
     {
         System.out.print(message);
