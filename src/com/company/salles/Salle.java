@@ -42,13 +42,6 @@ public class Salle {
                 if (c.getFin().compareTo(creneau.getDebut()) >= 1) // c fin < c debut
                     return false;
             }
-
-
-            /*int comparator = creneau.getFin().compareTo(c.getDebut()) ;
-            int comparator2 = creneau.getDebut().compareTo(c.getFin());
-            if ( comparator <= -1 || comparator2 >= 1 ){
-                return false;
-            }*/
         }
         return true;
 
@@ -86,5 +79,14 @@ public class Salle {
 
     public int getTarifPlace() {return tarifPlace;}
     public double getTarifReduit() {return tarifReduit;}
+
+    public String getNom() { return nom; }
+
+    @Override
+    public String toString()
+    {
+        return numero + " | " + nom + " | " + nbDePlace + " | " + tarifPlace + " | " + tarifReduit;
+    }
+
 
 }

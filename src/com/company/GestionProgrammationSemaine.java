@@ -179,6 +179,13 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
             throw new IllegalArgumentException("Salle inexistante");
         int duree = lesFilms.get(idFilm).getDuree();
         Horaire fin = new Horaire( debut.getHeure() + duree / 60, debut.getMinute() + duree % 60);
+
+        if(fin.getMinute() >= 60)
+        {
+            int q = fin.getMinute() - 60;
+            fin = new Horaire(fin.getHeure() + 1, q);
+        }
+
         Creneau cr = new Creneau(jour, debut, fin);
         if(!lesSalles.get(idSalle).estDisponible(cr))
         {
@@ -225,14 +232,20 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
     public void ajouterSeanceTheatre(int idPiece, int jour, Horaire debut, int idSalle) {
         if(!lesPieces.containsKey(idPiece))
             throw new IllegalArgumentException("Piece inexistante");
-        if(!lesSalles.containsKey(idSalle))
+        if(!lesSallesTheatre.containsKey(idSalle))
             throw new IllegalArgumentException("Salle inexistante");
         Horaire fin = new Horaire(debut.getHeure() + 3, debut.getMinute());
-        // TODO: test horaire >= 23
+
+        if(fin.getHeure() >= 24)
+        {
+            int q = fin.getHeure() - 24;
+            fin = new Horaire(fin.getHeure() + q, fin.getMinute());
+        }
+
         Creneau cr = new Creneau(jour, debut, fin);
-        if(!lesSalles.get(idSalle).estDisponible(cr))
+        if(!lesSallesTheatre.get(idSalle).estDisponible(cr))
             throw new IllegalStateException("Creneau indisponnible pour dans cette salle");
-        SalleTheatre salle = (SalleTheatre)lesSalles.get(idSalle);
+        SalleTheatre salle = lesSallesTheatre.get(idSalle);
         SeanceTheatre seance = new SeanceTheatre(salle, cr);
         lesPieces.get(idPiece).ajouterSeance(seance);
     }
@@ -465,13 +478,10 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
     @Override
     public String lesPieces()
     {
-        String result = "";
+        String result = "\n";
 
         for(Map.Entry<Integer, PieceTheatre> entry : lesPieces.entrySet())
-        {
-            result += entry.getValue().toString();
-            result += "\n";
-        }
+            result += entry.getValue().toString() + "\n";
 
         return result;
     }
@@ -480,16 +490,28 @@ public class GestionProgrammationSemaine implements IProgrammationSemaine {
      * @return les salles de film sous forme d'une chaîne de caractères
      */
     @Override
-    public String lesSallesFilm() {
-        return null;
+    public String lesSallesFilm()
+    {
+        String result = "\n numero | nom | nbDePlace | tarifPlace | tarifReduit \n";
+
+        for(Map.Entry<Integer, Salle> entry : lesSalles.entrySet())
+            result += entry.getValue().toString() + "\n";
+
+        return result;
     }
 
     /**
      * @return les salles de théâtre sous forme d'une chaîne de caractères
      */
     @Override
-    public String lesSallesTheatre() {
-        return null;
+    public String lesSallesTheatre()
+    {
+        String result = "\n numero | nom | nbDePlace | tarifPlace | nbFauteuils | prixFauteuil \n";
+
+        for(Map.Entry<Integer, SalleTheatre> entry : lesSallesTheatre.entrySet())
+            result += entry.getValue().toString() + "\n";
+
+        return result;
     }
 
     /**

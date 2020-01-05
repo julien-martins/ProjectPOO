@@ -180,6 +180,8 @@ public class Main {
                                     continue;
                                 }
 
+                                System.out.println(gestionProgrammationSemaine.lesSallesFilm());
+
                                 System.out.print("Veuillez saisir l'id de la salle du film: ");
                                 if(entree.hasNextInt())
                                     idSalle = entree.nextInt();
@@ -200,13 +202,13 @@ public class Main {
                                 break;
                             case 5: // Ajouter une seance pour une piece de theatre
 
-                                if(gestionProgrammationSemaine.lesFilms() == null)
+                                if(gestionProgrammationSemaine.lesPieces() == null)
                                 {
-                                    System.out.println("Aucun film ! ");
+                                    System.out.println("Aucune Piece ! ");
                                     continue;
                                 }
 
-                                System.out.println(gestionProgrammationSemaine.lesFilms());
+                                System.out.println(gestionProgrammationSemaine.lesPieces());
 
                                 System.out.print("Veuillez saisir l'id de la piece: ");
                                 if(entree.hasNextInt())
@@ -247,6 +249,8 @@ public class Main {
                                     entree.reset();
                                     continue;
                                 }
+
+                                System.out.println(gestionProgrammationSemaine.lesSallesTheatre());
 
                                 System.out.print("Veuillez saisir l'id de la salle de la piece: ");
                                 if(entree.hasNextInt())
@@ -322,7 +326,7 @@ public class Main {
 
                                 System.out.print("Veuillez saisir le nombre de place tarif normal:");
                                 if(entree.hasNextInt())
-                                    minutes = entree.nextInt();
+                                    nbPlaceTN = entree.nextInt();
                                 else
                                 {
                                     System.out.println("Veuillez saisir un chiffre !");
@@ -332,7 +336,7 @@ public class Main {
 
                                 System.out.print("Veuillez saisir le nombre de place tarif reduit:");
                                 if(entree.hasNextInt())
-                                    minutes = entree.nextInt();
+                                    nbPlaceTR = entree.nextInt();
                                 else
                                 {
                                     System.out.println("Veuillez saisir un chiffre !");
@@ -421,8 +425,8 @@ public class Main {
                                     continue;
                                 }
 
-                                System.out.println("Taux de remplissage : " + gestionProgrammationSemaine.getTauxRemplissage(idSpectacle));
-                                System.out.println("Chiffre D'affaire : " + gestionProgrammationSemaine.chiffreAffaires(idSpectacle));
+                                System.out.println("Taux de remplissage : " + gestionProgrammationSemaine.getTauxRemplissage(idSpectacle) + " % ");
+                                System.out.println("Chiffre D'affaire : " + gestionProgrammationSemaine.chiffreAffaires(idSpectacle) + " euro(s) ");
 
                                 System.out.println("Retour au menu ... ");
                                 Thread.sleep(1000);

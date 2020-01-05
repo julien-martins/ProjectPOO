@@ -14,4 +14,10 @@ public class SalleTheatre extends Salle {
     public int getNbFauteuils(){ return nbFauteuils; }
     public int getPrixFauteuil() { return prixFauteuil; }
 
+    @Override
+    public String toString()
+    {
+        return getNumero() + " | " + getNom() + " | " + getNbDePlace() + " | " + getTarifPlace() + " | " + nbFauteuils + " | " + prixFauteuil;
+    }
+
 }
