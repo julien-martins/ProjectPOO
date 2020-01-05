@@ -5,6 +5,9 @@ import com.company.Creneau;
 import java.util.*;
 
 
+/**
+ *
+ */
 public class Salle {
     private int numero;
     private static int numeroSalle;
@@ -15,6 +18,11 @@ public class Salle {
     private Map<Integer, Set<Creneau>> lesCreneauxOcupes;
 
 
+    /**
+     * @param nom
+     * @param nbDePlace
+     * @param tarifPlace
+     */
     public Salle(String nom,int nbDePlace,int tarifPlace){
         numeroSalle+=10;
         this.numero=numeroSalle;
@@ -25,6 +33,11 @@ public class Salle {
         this.tarifReduit=tarifPlace-(tarifPlace*0.60);
 
     }
+
+    /**
+     * @param c
+     * @return
+     */
     public boolean estDisponible(Creneau c){
         Set<Creneau> lesCreneaux = lesCreneauxOcupes.get(c.getJourDeLaSemaine());
         if(lesCreneaux == null)
@@ -46,6 +59,11 @@ public class Salle {
         return true;
 
     }
+
+    /**
+     * @param c
+     * @return
+     */
     public boolean ajouterCreneau(Creneau c){
         if (lesCreneauxOcupes.containsKey(c.getJourDeLaSemaine())) {
 
@@ -61,6 +79,11 @@ public class Salle {
             return false;
         }
     }
+
+    /**
+     * @param jour
+     * @return
+     */
     public boolean pasDeCreneauDisponible(int jour){
         if(lesCreneauxOcupes.containsKey(jour)){
             return lesCreneauxOcupes.get(jour).isEmpty();
@@ -68,16 +91,32 @@ public class Salle {
         return false;
     }
 
+    /**
+     * supprimer le creneau en cas de non disponibilité
+     */
     public void supprimerCreneauOccupes()
     {
         lesCreneauxOcupes.clear();
     }
 
+    /**
+     * @return numero de salle
+     */
     public int getNumero() { return numero; }
 
+    /**
+     * @return nombre de place disponible
+     */
     public int getNbDePlace(){return nbDePlace;}
 
+    /**
+     * @return tarif de place
+     */
     public int getTarifPlace() {return tarifPlace;}
+
+    /**
+     * @return tarif des place reduite en cas de reduction
+     */
     public double getTarifReduit() {return tarifReduit;}
 
     public String getNom() { return nom; }

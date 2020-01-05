@@ -5,18 +5,34 @@ public class Creneau {
     Horaire fin;
     int jourDeLaSemaine;
 
+    /**
+     * @param jourDeLaSemaine
+     * @param debut
+     * @param fin
+     */
     public Creneau(int jourDeLaSemaine, Horaire debut, Horaire fin) {
         this.debut = debut;
         this.fin = fin;
         this.jourDeLaSemaine = jourDeLaSemaine;
     }
 
+    /**
+     * @return horaire de debut
+     */
     public Horaire getDebut() {
         return debut;
     }
+
+    /**
+     * @return horaire de fin
+     */
     public Horaire getFin(){
         return fin;
     }
+
+    /**
+     * @return jour de la seance
+     */
     public int getJourDeLaSemaine(){
         return jourDeLaSemaine;
     }
