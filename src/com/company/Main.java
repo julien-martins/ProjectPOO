@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
 public class Main {
 
     private static Scanner scanner;
@@ -43,21 +42,13 @@ public class Main {
         } while (running);
         System.out.println("Arret en cours...");
     }
-    /**
-     * @param : entrer le chiffre 0
-     * @return: renitialise tout le programme
-     *
-     */
+
     private static void reinitialiserProgrammation()
     {
         gestion.reinitialiserProgrammation();
         logMessage("Programmation reinitialiser ...");
     }
-    /**
-     * @param : entrer le chiffre 1
-     * @return: appele la classe AjouterFiml
-     *
-     */
+
     private static void ajouterFilm()
     {
         System.out.print("Veuillez saisir le titre du film: ");
@@ -71,11 +62,7 @@ public class Main {
         gestion.ajouterFilm(titre, realisateur, duree);
         logMessage("Ajout d'un film ... ");
     }
-    /**
-     * @param : entrer le chiffre 2
-     * @return: appele la classe AjouterPiece
-     *
-     */
+
     private static void ajouterPiece()
     {
         System.out.print("Veuillez saisir le titre de la piece: ");
@@ -90,11 +77,7 @@ public class Main {
 
         logMessage("Ajout d'une piece ... ");
     }
-    /**
-     * @param : entrer le chiffre 3
-     * @return: appele la classe AjouterInterprete
-     *
-     */
+
     private static void ajouterInterprete()
     {
         System.out.println(gestion.lesFilms());
@@ -109,11 +92,7 @@ public class Main {
 
         logMessage("Interprete ajoute ... ");
     }
-    /**
-     * @param : entrer le chiffre 4
-     * @return: appele la classe AjouterSeanceFilm
-     *
-     */
+
     private static void ajouterSeanceFilm()
     {
         System.out.println(gestion.lesFilms());
@@ -135,11 +114,7 @@ public class Main {
 
         logMessage("Ajout Seance Film ... ");
     }
-    /**
-     * @param : entrer le chiffre 5
-     * @return: appele la classe AjouterSeancePiece
-     *
-     */
+
     private static void ajouterSeancePiece()
     {
         System.out.println(gestion.lesPieces());
@@ -164,11 +139,7 @@ public class Main {
 
         logMessage("Ajout Seance Film ... ");
     }
-    /**
-     * @param : entrer le chiffre 6
-     * @return: appele la classe vendrePlaceFilm
-     *
-     */
+
     private static void vendrePlaceFilm()
     {
         boolean inputValid = true;
@@ -206,11 +177,7 @@ public class Main {
 
         logMessage("Vente effectue ... ");
     }
-    /**
-     * @param : entrer le chiffre 7
-     * @return: execute les instruction de vendrePlacePiece
-     *
-     */
+
     private static void vendrePlacePiece()
     {
         System.out.println(gestion.lesPieces());
@@ -232,11 +199,7 @@ public class Main {
 
         logMessage("Vente effectue ... ");
     }
-    /**
-     * @param : entrer le chiffre 8
-     * @return: execute les instruction de tauxChiffreaffaire
-     *
-     */
+
     private static void tauxEtChiffreAffaire()
     {
         System.out.println(gestion.lesFilms());
@@ -248,10 +211,6 @@ public class Main {
         System.out.println("Chiffre D'affaire : " + gestion.chiffreAffaires(idSpectacle) + " euro(s) ");
     }
 
-    /**
-     * @param choice
-     * @return en sebsant sur le choix appele une des fonctions
-     */
     private static boolean gestionMenu(int choice)
     {
         if(choice < 0 || choice > 9)
@@ -280,16 +239,12 @@ public class Main {
         return true;
     }
 
-    /**
-     * @param message
-     * @return un message qui demande a l'utilisateur de saisir un chiffre
-     */
     private static Integer inputValue(String message)
     {
         System.out.print(message);
         if(!scanner.hasNextInt()) {
             scanner.nextLine();
-            throw new IllegalArgumentException("Veuillez saisir un chiffre s'il vous plait !");
+            throw new IllegalArgumentException("Veuillez saisir un chiffre !");
         }
 
         int value = scanner.nextInt();
@@ -297,17 +252,11 @@ public class Main {
         return value;
     }
 
-    /**
-     * @param message
-     */
     private static void logMessage(String message)
     {
         System.out.println( "\033[0;34m " + message + " \033[0m");
     }
 
-    /**
-     * affiche le menu du depart
-     */
     private static void afficherMenu()
     {
         System.out.println("reinitialiser programmation (0)");
